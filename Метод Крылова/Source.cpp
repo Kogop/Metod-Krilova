@@ -12,8 +12,31 @@ double YItoe[n][n];
 int k = -1;
 double q[n][n];
 double x[n][n];
+double q1[n][n+1];
+int N = n + 1;
+double p1[n];
 
 
+void Gauss(int k, double Matrix[n][n + 1]) {
+	if (Matrix[k][k] != 1) {
+		double T = Matrix[k][k];
+		for (int j = k; j < n+1; j++) {
+			Matrix[k][j] = Matrix[k][j] / T;
+		}
+	}
+	for (int i = 0; i < n; i++) {
+		if ((Matrix[i][k] != 0) && (i != k)) {
+			double T = Matrix[i][k];
+			Matrix[i][k] = 0;
+			for (int j = k + 1; j < n+1; j++) {
+				Matrix[i][j] -= Matrix[k][j] * T;
+			}
+		}
+	}
+	if (k < n - 1) {
+		Gauss(k + 1, Matrix);
+	}
+}
 
 double Zamena(int k) {
 
@@ -43,7 +66,21 @@ double Yitie() {
 	return 1;
 }
 
+double ZagatovkaDlyaGaussa() {
+	for (int i = 0; i < n; i++)
+	{
+		q1[i][0] = YItoe[i][2];
+		q1[i][1] = YItoe[i][1];
+		q1[i][2] = YItoe[i][0];
+		q1[i][4] = YItoe[i][3];
+	}
+	q1[0][3] = { 1 };
+	q1[1][3] = { 0 };
+	q1[2][3] = { 0 };
+	q1[3][3] = { 0 };
 
+	return 1;
+}
 
 
 int main() {
@@ -52,7 +89,12 @@ int main() {
 	{
 	Yitie();
 	}
-	
+	ZagatovkaDlyaGaussa();
+	Gauss(0, q1);
+	for (int i = 0; i < n; i++)
+	{
+		p1[i] = q1[i][4];
+	}
 	// C помощью метода гауса нашли все p, они равны соответственно	
 	double p[n] = { 6,0.2,-12.735,2.7616 };
 	//име€ эти значени€ можем найти Ћ€мбды
@@ -112,7 +154,18 @@ int main() {
 		}
 		cout << "\n";
 	}
+
+	cout << endl;
+
+	for (int i = 0; i < n; i++)
+	{
+		for (int j = 0; j < N; j++) {
+			cout << q1[i][j] << " ";
+		}
+		cout << "\n";
+	}
+
 	
+
 	return 1;
-	
 }
