@@ -15,9 +15,9 @@ double x[n][n];
 double q1[n][n+1];
 int N = n + 1;
 double p1[n];
-const double eps = 0.0001, delta = 0.001, Min = -100, Max = 100, H = 0.001;
+const double eps = 0.0001, delta = 0.001, Min = -10, Max = 10, H = 0.0001;
 double  S_korn[n];
-
+long double l[n];
 
 void Gauss(int k, double Matrix[n][n + 1]) {
 	if (Matrix[k][k] != 1) {
@@ -86,11 +86,11 @@ double ZagatovkaDlyaGaussa() {
 
 //значение полинома в точке xf
 double Pol(double* A, double xf) {
-	double Sum = pow(xf, N);
-	for (size_t i = 1; i <= N; i++) {
-		Sum -= p1[i - 1] * pow(xf, N - i);
+	double Sum = pow(xf, n);
+	for (size_t i = 1; i <= n; i++) {
+		Sum -= p1[i - 1] * pow(xf, n - i);
 	}
-	return pow(-1, N) * Sum;
+	return pow(-1, n) * Sum;
 }
 //производна€ полинома в точке xf
 double dx(double xf) {
@@ -136,8 +136,15 @@ int main() {
 	// C помощью метода гауса нашли все p, они равны соответственно	
 	double p[n] = { 6,0.2,-12.735,2.7616 };
 	//име€ эти значени€ можем найти Ћ€мбды
-	double l[n] = { -1.4201,0.2226,1.5454,5.652 };
+	double l1[n] = { -1.4201,0.2226,1.5454,5.652 };
 
+	Search(S_korn);
+	for (int i = 0; i < n; i++) {
+		l[i] = Nyuton(S_korn[i]);
+		cout << l[i] << endl;
+		//cout << p1[i] << endl;
+	}
+	
 	for (int i = 0; i < n; i++)
 	{
 		q[0][i] = 1;
@@ -202,12 +209,15 @@ int main() {
 		}
 		cout << "\n";
 	}
-
-	Search(S_korn);
-	for (size_t i = 0; i < n; i++) {
-		cout << endl << Nyuton(S_korn[i]) << endl;
-		//cout << p1[i] << endl;
-	}
+	cout << endl;
+	//Search(S_korn);
+	//for (size_t i = 0; i < n; i++) {
+	//	cout  << Nyuton(S_korn[i]) << endl;
+	//	//cout << p1[i] << endl;
+	//}
+	//cout << endl;
+	//cout << "lambda^4+" << p1[0] << "lambda^3+" << p1[1] << "lambda^2+" << p1[2] << "lambda+" << p1[3];
+	//cout << endl;
 
 	return 1;
 }
